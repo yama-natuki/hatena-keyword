@@ -5,7 +5,7 @@
 ;; Author: yama  <yama.natuki+elisp＠gmail.com>
 ;; Keywords: 
 
-;; 	$Id: hatena-keyword.el,v 1.28 2009/05/03 13:35:06 yama Exp yama $	
+;; 	$Id: hatena-keyword.el,v 1.29 2017/07/21 02:32:35 yama Exp $	
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -137,7 +137,9 @@ key     binding
 (defun my-keyword (url)
   "キーワードの解説を返す。"
   (interactive)
-	(set-buffer (url-retrieve-synchronously url))
+  (if (>= emacs-major-version 24)
+      (set-buffer (url-retrieve-synchronously url 0 'no-cookie))
+    (set-buffer (url-retrieve-synchronously url)))
 	(if (string-match "200 OK" (buffer-substring (point-min) 20))
 		(progn
 		  (let* ((root (xml-parse-region (point-min) (point-max)))
